@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import {
   Menu,
@@ -30,7 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { useMobile } from "@/hooks/use-mobile"
-import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants"
+import Image from "next/image"
 import { CredentialsTooltip } from "@/components/credentials-tooltip"
 
 export default function Navbar() {
@@ -64,23 +63,34 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }, [pathname])
 
-  // Map icon names to components
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case "radio":
-        return <RadioIcon className="h-4 w-4 mr-2" />
-      case "mic":
-        return <Mic className="h-4 w-4 mr-2" />
-      case "book-open":
-        return <BookOpen className="h-4 w-4 mr-2" />
-      case "calendar":
-        return <Calendar className="h-4 w-4 mr-2" />
-      case "clock":
-        return <Clock className="h-4 w-4 mr-2" />
-      default:
-        return null
-    }
-  }
+  // Navigation links
+  const navLinks = [
+    {
+      name: "Radio",
+      href: "/radio",
+      icon: <RadioIcon className="h-4 w-4 mr-2" />,
+    },
+    {
+      name: "Programmi",
+      href: "/programmi",
+      icon: <Mic className="h-4 w-4 mr-2" />,
+    },
+    {
+      name: "Rubriche",
+      href: "/rubriche",
+      icon: <BookOpen className="h-4 w-4 mr-2" />,
+    },
+    {
+      name: "Eventi",
+      href: "/events",
+      icon: <Calendar className="h-4 w-4 mr-2" />,
+    },
+    {
+      name: "Palinsesto",
+      href: "/schedule",
+      icon: <Clock className="h-4 w-4 mr-2" />,
+    },
+  ]
 
   return (
     <header
@@ -95,7 +105,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             <div className="h-8 w-8 relative">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20radio%20colori%202-da4AUxgQcWnmORZIYNkdWrSieWHsk9.png"
+                src="/images/logo-radio-carducci-new.png"
                 alt="Radio Carducci Logo"
                 fill
                 className="object-contain"
@@ -106,7 +116,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
@@ -117,17 +127,17 @@ export default function Navbar() {
                     : "text-gray-300 hover:bg-gray-800 hover:text-white",
                 )}
               >
-                {getIcon(link.icon)}
+                {link.icon}
                 {link.name}
               </Link>
             ))}
           </nav>
 
-          {/* Social, Auth Buttons and Credentials */}
+          {/* Social and Auth Buttons */}
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2 mr-2">
               <Link
-                href={SITE_CONFIG.links.instagram}
+                href="https://www.instagram.com/radiocarducci/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-600 transition-colors"
@@ -138,7 +148,7 @@ export default function Navbar() {
                 </svg>
               </Link>
               <Link
-                href={SITE_CONFIG.links.tiktok}
+                href="https://www.tiktok.com/@radiocarducci"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-600 transition-colors"
@@ -152,7 +162,6 @@ export default function Navbar() {
               {/* Credentials Tooltip */}
               <CredentialsTooltip />
             </div>
-
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -209,7 +218,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <div className="container mx-auto px-4 py-3 space-y-1">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
@@ -220,7 +229,7 @@ export default function Navbar() {
                     : "text-gray-300 hover:bg-gray-800 hover:text-white",
                 )}
               >
-                {getIcon(link.icon)}
+                {link.icon}
                 {link.name}
               </Link>
             ))}
@@ -228,7 +237,7 @@ export default function Navbar() {
             {/* Mobile Credentials */}
             <div className="px-3 py-2 flex items-center">
               <CredentialsTooltip />
-              <span className="ml-2 text-gray-400">Info accesso</span>
+              <span className="ml-2 text-gray-400 text-sm">Info accesso</span>
             </div>
           </div>
         </div>

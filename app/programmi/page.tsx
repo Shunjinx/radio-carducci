@@ -1,16 +1,146 @@
 "use client"
 
 import { useState } from "react"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Info } from "lucide-react"
+import { Play, Search, Info, Clock, Radio } from "lucide-react"
 import Image from "next/image"
-import { ProgramCard } from "@/components/program-card"
+import { useAudioPlayer } from "@/lib/use-audio-player"
+import { useToast } from "@/hooks/use-toast"
+import { LikeButton } from "@/components/like-button"
 import { Badge } from "@/components/ui/badge"
-import { PROGRAMS } from "@/lib/data"
-import { CATEGORIES } from "@/lib/constants"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+// Tipi di programmi disponibili
+type ProgramType = "programma" | "rubrica"
+
+// Categorie di programmi disponibili
+const CATEGORIES = ["Intrattenimento", "Musica", "Cultura", "Scienza", "Sport", "Tecnologia", "Arte"]
+
+// Dati dei programmi
+const PROGRAMS = [
+  {
+    id: "1",
+    title: "Chiacchiere Gratis",
+    description:
+      "Intrattenimento, potete sbizzarrirvi con qualsiasi notizia generale. Magari divertente o super mega shock, che faccia informazione o cose del genere.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Intrattenimento",
+    type: "programma" as ProgramType,
+    hosts: ["Sofia", "Riccardo"],
+    duration: 30,
+    schedule: "Lunedì, 15:00",
+    details: "5 talk - 4 intermezzi musicali tra un talk e l'altro",
+  },
+  {
+    id: "2",
+    title: "Emergenza Emergenti",
+    description:
+      "Interviste ai cantanti emergenti. Solitamente l'intervista si fa nei talk 3 e 4, poiché il primo è di presentazione del programma, il secondo d'introduzione dell'ospite e il quinto di chiusura.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Musica",
+    type: "programma" as ProgramType,
+    hosts: ["Lorenzo", "Milla"],
+    duration: 30,
+    schedule: "Martedì, 16:00",
+    details: "5 talk - 4 intermezzi musicali tra un talk e l'altro",
+  },
+  {
+    id: "3",
+    title: "Olympic Arena",
+    description:
+      "Intervista agli atleti della nostra scuola, di altre, insomma persone prevalentemente giovani che fanno sport ad alti livelli. Anche qui l'intervista sarà nei talk 3 e 4.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Sport",
+    type: "programma" as ProgramType,
+    hosts: ["Simone B.", "Sofia B."],
+    duration: 30,
+    schedule: "Mercoledì, 15:00",
+    details: "5 talk - 4 intermezzi musicali tra un talk e l'altro",
+  },
+  {
+    id: "4",
+    title: "Biglietti X2",
+    description: "Musei, spettacoli a teatro, mostre, queste cose qui. Una guida agli eventi culturali da non perdere.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Cultura",
+    type: "programma" as ProgramType,
+    hosts: ["Paolo"],
+    duration: 30,
+    schedule: "Giovedì, 16:00",
+    details: "5 talk - 4 intermezzi musicali tra un talk e l'altro",
+  },
+  {
+    id: "5",
+    title: "Broken Sound",
+    description:
+      "Sul metal e le sue diramazioni. Un viaggio nel mondo della musica metal e delle sue diverse sfaccettature.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Musica",
+    type: "programma" as ProgramType,
+    hosts: ["Tommaso"],
+    duration: 30,
+    schedule: "Venerdì, 15:00",
+    details: "5 talk - 4 intermezzi musicali tra un talk e l'altro",
+  },
+  {
+    id: "6",
+    title: "Ricette Letterarie",
+    description:
+      "Troviamo la ricetta di un cibo scritta in un libro della letteratura italiana o estera che sia e la diciamo. Facciamo sempre un'introduzione allo/a scrittrice/ore e poi diciamo la ricetta.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Cultura",
+    type: "programma" as ProgramType,
+    hosts: ["Nicole"],
+    duration: 30,
+    schedule: "Venerdì, 16:30",
+    details: "5 talk - 4 intermezzi musicali tra un talk e l'altro",
+  },
+  {
+    id: "7",
+    title: "Almanacco",
+    description:
+      "Evento del passato accaduto in quel giorno (es: il 21 marzo del 1963 chiudeva Alcatraz, famosa prigione di massima sicurezza).",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Cultura",
+    type: "rubrica" as ProgramType,
+    hosts: ["Prof. Bellone"],
+    duration: 15,
+    schedule: "Lunedì, 14:30",
+    details: "3 talk - 2 intermezzi musicali",
+  },
+  {
+    id: "8",
+    title: "Radio Scienza Pop",
+    description: "Parliamo di scienza in tutte le sue forme: spazio, biologia, AI, tecnologia, chimica, e bla bla bla.",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Scienza",
+    type: "rubrica" as ProgramType,
+    hosts: ["Simone"],
+    duration: 15,
+    schedule: "Mercoledì, 14:30",
+    details: "3 talk - 2 intermezzi musicali",
+  },
+  {
+    id: "9",
+    title: "Strano ma Funziona",
+    description:
+      "Facciamo conoscere alla gente oggetti strani che funzionano (posate con i ventilatori per far raffreddare il cibo, cappello che fa crescere i capelli e cosi via).",
+    image: "/placeholder.svg?height=400&width=400",
+    category: "Tecnologia",
+    type: "rubrica" as ProgramType,
+    hosts: ["Lorenzo", "Sofia"],
+    duration: 15,
+    schedule: "Giovedì, 14:30",
+    details: "3 talk - 2 intermezzi musicali",
+  },
+]
 
 export default function ProgrammiPage() {
+  const { playTrack } = useAudioPlayer()
+  const { toast } = useToast()
   const [searchTerm, setSearchTerm] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("all")
   const [typeFilter, setTypeFilter] = useState("all")
@@ -47,6 +177,16 @@ export default function ProgrammiPage() {
     return 0
   })
 
+  // Funzione per riprodurre un programma
+  const handlePlayProgram = (program: (typeof PROGRAMS)[0]) => {
+    toast({
+      title: `Riproduzione di ${program.title}`,
+      description: `Condotto da ${program.hosts.join(", ")}`,
+    })
+
+    // Qui si potrebbe implementare la riproduzione effettiva
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       <div className="container mx-auto px-4 py-8">
@@ -54,7 +194,7 @@ export default function ProgrammiPage() {
           <div className="flex items-center gap-4">
             <div className="h-16 w-16 relative bg-white/10 rounded-full p-2">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20radio%20colori%202-da4AUxgQcWnmORZIYNkdWrSieWHsk9.png"
+                src="/images/logo-radio-carducci-new.png"
                 alt="Radio Carducci Logo"
                 fill
                 className="object-contain"
@@ -143,7 +283,80 @@ export default function ProgrammiPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {sortedPrograms.map((program) => (
-              <ProgramCard key={program.id} program={program} />
+              <TooltipProvider key={program.id}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Card className="bg-gray-800/70 border-gray-600/50 overflow-hidden card-hover-effect h-full flex flex-col backdrop-blur-sm">
+                      <div className="relative aspect-square">
+                        <Image
+                          src={program.image || "/placeholder.svg"}
+                          alt={program.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center p-4">
+                          <Button
+                            variant="default"
+                            size="icon"
+                            className="rounded-full bg-red-600 hover:bg-red-700 text-white"
+                            onClick={() => handlePlayProgram(program)}
+                          >
+                            <Play className="h-6 w-6" />
+                          </Button>
+                        </div>
+                        <div className="absolute top-3 right-3">
+                          <Badge
+                            className={
+                              program.type === "programma"
+                                ? "bg-red-600/30 text-red-300 border-red-500/50"
+                                : "bg-blue-600/30 text-blue-300 border-blue-500/50"
+                            }
+                          >
+                            {program.type === "programma" ? "Programma" : "Rubrica"}
+                          </Badge>
+                        </div>
+                      </div>
+                      <CardContent className="p-5 flex-grow">
+                        <div className="flex items-center text-sm mb-3">
+                          <Badge variant="secondary" className="mr-3 bg-gray-700/50 text-gray-200 border-gray-600">
+                            {program.category}
+                          </Badge>
+                          <div className="flex items-center text-gray-300">
+                            <Clock className="h-4 w-4 mr-1" />
+                            <span className="font-medium">{program.duration} min</span>
+                          </div>
+                        </div>
+                        <h3 className="font-bold text-xl mb-3 text-white">{program.title}</h3>
+                        <p className="text-gray-200 text-sm line-clamp-3 leading-relaxed">{program.description}</p>
+                      </CardContent>
+                      <CardFooter className="p-5 pt-0 flex justify-between text-sm text-gray-300 mt-auto">
+                        <div className="flex items-center">
+                          <Radio className="h-4 w-4 mr-2" />
+                          <span className="font-medium">{program.schedule}</span>
+                        </div>
+                        <LikeButton targetId={`program-${program.id}`} />
+                      </CardFooter>
+                    </Card>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="bg-gray-800 border-gray-600 p-4 max-w-xs">
+                    <div className="space-y-3">
+                      <div className="font-bold text-white text-lg">{program.title}</div>
+                      <div className="text-sm">
+                        <span className="text-red-400 font-medium">Durata:</span>{" "}
+                        <span className="text-gray-200">{program.duration} minuti</span>
+                      </div>
+                      <div className="text-sm">
+                        <span className="text-red-400 font-medium">Formato:</span>{" "}
+                        <span className="text-gray-200">{program.details}</span>
+                      </div>
+                      <div className="text-sm">
+                        <span className="text-red-400 font-medium">Conduttori:</span>{" "}
+                        <span className="text-gray-200">{program.hosts.join(", ")}</span>
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ))}
           </div>
         )}
