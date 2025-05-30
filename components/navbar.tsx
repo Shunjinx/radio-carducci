@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import {
   Menu,
@@ -29,7 +30,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { useMobile } from "@/hooks/use-mobile"
-import Image from "next/image"
+import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants"
+import { CredentialsTooltip } from "@/components/credentials-tooltip"
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -62,34 +64,23 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }, [pathname])
 
-  // Navigation links
-  const navLinks = [
-    {
-      name: "Radio",
-      href: "/radio",
-      icon: <RadioIcon className="h-4 w-4 mr-2" />,
-    },
-    {
-      name: "Programmi",
-      href: "/programmi",
-      icon: <Mic className="h-4 w-4 mr-2" />,
-    },
-    {
-      name: "Rubriche",
-      href: "/rubriche",
-      icon: <BookOpen className="h-4 w-4 mr-2" />,
-    },
-    {
-      name: "Eventi",
-      href: "/events",
-      icon: <Calendar className="h-4 w-4 mr-2" />,
-    },
-    {
-      name: "Palinsesto",
-      href: "/schedule",
-      icon: <Clock className="h-4 w-4 mr-2" />,
-    },
-  ]
+  // Map icon names to components
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case "radio":
+        return <RadioIcon className="h-4 w-4 mr-2" />
+      case "mic":
+        return <Mic className="h-4 w-4 mr-2" />
+      case "book-open":
+        return <BookOpen className="h-4 w-4 mr-2" />
+      case "calendar":
+        return <Calendar className="h-4 w-4 mr-2" />
+      case "clock":
+        return <Clock className="h-4 w-4 mr-2" />
+      default:
+        return null
+    }
+  }
 
   return (
     <header
@@ -104,7 +95,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             <div className="h-8 w-8 relative">
               <Image
-                src="/images/logo-radio-carducci-2.png"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20radio%20colori%202-da4AUxgQcWnmORZIYNkdWrSieWHsk9.png"
                 alt="Radio Carducci Logo"
                 fill
                 className="object-contain"
@@ -115,7 +106,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
@@ -126,17 +117,17 @@ export default function Navbar() {
                     : "text-gray-300 hover:bg-gray-800 hover:text-white",
                 )}
               >
-                {link.icon}
+                {getIcon(link.icon)}
                 {link.name}
               </Link>
             ))}
           </nav>
 
-          {/* Social and Auth Buttons */}
+          {/* Social, Auth Buttons and Credentials */}
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2 mr-2">
               <Link
-                href="https://www.instagram.com/radiocarducci/"
+                href={SITE_CONFIG.links.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-600 transition-colors"
@@ -147,7 +138,7 @@ export default function Navbar() {
                 </svg>
               </Link>
               <Link
-                href="https://www.tiktok.com/@radiocarducci"
+                href={SITE_CONFIG.links.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-600 transition-colors"
@@ -157,7 +148,11 @@ export default function Navbar() {
                   <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
                 </svg>
               </Link>
+
+              {/* Credentials Tooltip */}
+              <CredentialsTooltip />
             </div>
+
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -214,7 +209,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <div className="container mx-auto px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
@@ -225,10 +220,16 @@ export default function Navbar() {
                     : "text-gray-300 hover:bg-gray-800 hover:text-white",
                 )}
               >
-                {link.icon}
+                {getIcon(link.icon)}
                 {link.name}
               </Link>
             ))}
+
+            {/* Mobile Credentials */}
+            <div className="px-3 py-2 flex items-center">
+              <CredentialsTooltip />
+              <span className="ml-2 text-gray-400">Info accesso</span>
+            </div>
           </div>
         </div>
       )}

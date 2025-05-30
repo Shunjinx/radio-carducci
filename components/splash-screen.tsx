@@ -18,7 +18,7 @@ const SplashScreen = () => {
   return (
     isVisible && (
       <motion.div
-        className="fixed top-0 left-0 w-full h-full bg-white flex flex-col items-center justify-center z-50"
+        className="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 flex flex-col items-center justify-center z-50"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -34,7 +34,7 @@ const SplashScreen = () => {
           }}
         >
           <Image
-            src="/images/logo-radio-carducci-2.png"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20radio%20colori%202-da4AUxgQcWnmORZIYNkdWrSieWHsk9.png"
             alt="Radio Carducci Logo"
             fill
             className="object-contain"
@@ -42,7 +42,7 @@ const SplashScreen = () => {
           />
         </motion.div>
         <motion.h1
-          className="text-2xl font-bold text-gray-800"
+          className="text-3xl font-bold text-white"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
