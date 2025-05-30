@@ -188,171 +188,179 @@ export default function ProgrammiPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-12 w-12 relative">
-            <Image src="/images/logo-radio-carducci-2.png" alt="Radio Carducci Logo" fill className="object-contain" />
-          </div>
-          <h1 className="text-3xl font-bold">
-            <span className="gradient-text">Programmi</span> Radio Carducci
-          </h1>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Cerca programmi..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 bg-gray-800 border-gray-700"
-            />
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 relative bg-white/10 rounded-full p-2">
+              <Image
+                src="/images/logo-radio-carducci-2.png"
+                alt="Radio Carducci Logo"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">
+                <span className="gradient-text">Programmi</span> Radio Carducci
+              </h1>
+              <p className="text-gray-300 text-lg">Scopri tutti i nostri programmi e rubriche</p>
+            </div>
           </div>
 
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger className="w-full sm:w-[180px] bg-gray-800 border-gray-700">
-              <SelectValue placeholder="Categoria" />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-800 border-gray-700">
-              <SelectItem value="all">Tutte le categorie</SelectItem>
-              {CATEGORIES.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div className="relative flex-grow">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Cerca programmi..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 bg-gray-800/80 border-gray-600 text-white placeholder:text-gray-400 focus:border-red-500"
+              />
+            </div>
 
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-full sm:w-[180px] bg-gray-800 border-gray-700">
-              <SelectValue placeholder="Tipo" />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-800 border-gray-700">
-              <SelectItem value="all">Tutti i tipi</SelectItem>
-              <SelectItem value="programma">Programmi</SelectItem>
-              <SelectItem value="rubrica">Rubriche</SelectItem>
-            </SelectContent>
-          </Select>
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-full sm:w-[180px] bg-gray-800/80 border-gray-600 text-white">
+                <SelectValue placeholder="Categoria" />
+              </SelectTrigger>
+              <SelectContent className="bg-gray-800 border-gray-600">
+                <SelectItem value="all">Tutte le categorie</SelectItem>
+                {CATEGORIES.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select value={sortOrder} onValueChange={setSortOrder}>
-            <SelectTrigger className="w-full sm:w-[180px] bg-gray-800 border-gray-700">
-              <SelectValue placeholder="Ordina per" />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-800 border-gray-700">
-              <SelectItem value="az">A-Z</SelectItem>
-              <SelectItem value="za">Z-A</SelectItem>
-              <SelectItem value="duration-asc">Durata (crescente)</SelectItem>
-              <SelectItem value="duration-desc">Durata (decrescente)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-full sm:w-[180px] bg-gray-800/80 border-gray-600 text-white">
+                <SelectValue placeholder="Tipo" />
+              </SelectTrigger>
+              <SelectContent className="bg-gray-800 border-gray-600">
+                <SelectItem value="all">Tutti i tipi</SelectItem>
+                <SelectItem value="programma">Programmi</SelectItem>
+                <SelectItem value="rubrica">Rubriche</SelectItem>
+              </SelectContent>
+            </Select>
 
-      <div className="mb-8 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
-        <h2 className="text-xl font-bold mb-2">Legenda:</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-start gap-2">
-            <Badge variant="outline" className="bg-primary-600/20 text-primary-600 border-primary-600">
-              Programma
-            </Badge>
-            <span className="text-sm text-gray-300">
-              30 minuti - 5 talk - 4 intermezzi musicali tra un talk e l'altro
-            </span>
-          </div>
-          <div className="flex items-start gap-2">
-            <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-600">
-              Rubrica
-            </Badge>
-            <span className="text-sm text-gray-300">15 minuti - 3 talk - 2 intermezzi musicali</span>
+            <Select value={sortOrder} onValueChange={setSortOrder}>
+              <SelectTrigger className="w-full sm:w-[180px] bg-gray-800/80 border-gray-600 text-white">
+                <SelectValue placeholder="Ordina per" />
+              </SelectTrigger>
+              <SelectContent className="bg-gray-800 border-gray-600">
+                <SelectItem value="az">A-Z</SelectItem>
+                <SelectItem value="za">Z-A</SelectItem>
+                <SelectItem value="duration-asc">Durata (crescente)</SelectItem>
+                <SelectItem value="duration-desc">Durata (decrescente)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-      </div>
 
-      {sortedPrograms.length === 0 ? (
-        <div className="text-center py-12 bg-gray-900/50 border border-gray-800 rounded-lg">
-          <Info className="h-12 w-12 mx-auto text-gray-500 mb-4" />
-          <h3 className="text-xl font-medium mb-2">Nessun programma trovato</h3>
-          <p className="text-gray-400 mb-6">Prova a modificare i filtri di ricerca.</p>
+        <div className="mb-8 p-6 bg-gray-800/60 border border-gray-600/50 rounded-xl backdrop-blur-sm">
+          <h2 className="text-2xl font-bold mb-4 text-white">Legenda:</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex items-start gap-3">
+              <Badge className="bg-red-600/30 text-red-300 border-red-500/50 px-3 py-1">Programma</Badge>
+              <span className="text-gray-200 font-medium">
+                30 minuti - 5 talk - 4 intermezzi musicali tra un talk e l'altro
+              </span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Badge className="bg-blue-600/30 text-blue-300 border-blue-500/50 px-3 py-1">Rubrica</Badge>
+              <span className="text-gray-200 font-medium">15 minuti - 3 talk - 2 intermezzi musicali</span>
+            </div>
+          </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {sortedPrograms.map((program) => (
-            <TooltipProvider key={program.id}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Card className="bg-gray-900/50 border-gray-800 overflow-hidden card-hover-effect h-full flex flex-col">
-                    <div className="relative aspect-square">
-                      <Image
-                        src={program.image || "/placeholder.svg"}
-                        alt={program.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center p-4">
-                        <Button
-                          variant="default"
-                          size="icon"
-                          className="rounded-full"
-                          onClick={() => handlePlayProgram(program)}
-                        >
-                          <Play className="h-6 w-6" />
-                        </Button>
-                      </div>
-                      <div className="absolute top-2 right-2">
-                        <Badge
-                          variant="outline"
-                          className={
-                            program.type === "programma"
-                              ? "bg-primary-600/20 text-primary-600 border-primary-600"
-                              : "bg-blue-600/20 text-blue-400 border-blue-600"
-                          }
-                        >
-                          {program.type === "programma" ? "Programma" : "Rubrica"}
-                        </Badge>
-                      </div>
-                    </div>
-                    <CardContent className="p-4 flex-grow">
-                      <div className="flex items-center text-xs mb-2">
-                        <Badge variant="secondary" className="mr-2">
-                          {program.category}
-                        </Badge>
-                        <div className="flex items-center text-gray-400">
-                          <Clock className="h-3 w-3 mr-1" />
-                          <span>{program.duration} min</span>
+
+        {sortedPrograms.length === 0 ? (
+          <div className="text-center py-16 bg-gray-800/60 border border-gray-600/50 rounded-xl backdrop-blur-sm">
+            <Info className="h-16 w-16 mx-auto text-gray-400 mb-6" />
+            <h3 className="text-2xl font-medium mb-3 text-white">Nessun programma trovato</h3>
+            <p className="text-gray-300 text-lg mb-6">Prova a modificare i filtri di ricerca.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {sortedPrograms.map((program) => (
+              <TooltipProvider key={program.id}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Card className="bg-gray-800/70 border-gray-600/50 overflow-hidden card-hover-effect h-full flex flex-col backdrop-blur-sm">
+                      <div className="relative aspect-square">
+                        <Image
+                          src={program.image || "/placeholder.svg"}
+                          alt={program.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center p-4">
+                          <Button
+                            variant="default"
+                            size="icon"
+                            className="rounded-full bg-red-600 hover:bg-red-700 text-white"
+                            onClick={() => handlePlayProgram(program)}
+                          >
+                            <Play className="h-6 w-6" />
+                          </Button>
+                        </div>
+                        <div className="absolute top-3 right-3">
+                          <Badge
+                            className={
+                              program.type === "programma"
+                                ? "bg-red-600/30 text-red-300 border-red-500/50"
+                                : "bg-blue-600/30 text-blue-300 border-blue-500/50"
+                            }
+                          >
+                            {program.type === "programma" ? "Programma" : "Rubrica"}
+                          </Badge>
                         </div>
                       </div>
-                      <h3 className="font-bold text-lg mb-2">{program.title}</h3>
-                      <p className="text-gray-400 text-sm line-clamp-3">{program.description}</p>
-                    </CardContent>
-                    <CardFooter className="p-4 pt-0 flex justify-between text-xs text-gray-500 mt-auto">
-                      <div className="flex items-center">
-                        <Radio className="h-3 w-3 mr-1" />
-                        <span>{program.schedule}</span>
+                      <CardContent className="p-5 flex-grow">
+                        <div className="flex items-center text-sm mb-3">
+                          <Badge variant="secondary" className="mr-3 bg-gray-700/50 text-gray-200 border-gray-600">
+                            {program.category}
+                          </Badge>
+                          <div className="flex items-center text-gray-300">
+                            <Clock className="h-4 w-4 mr-1" />
+                            <span className="font-medium">{program.duration} min</span>
+                          </div>
+                        </div>
+                        <h3 className="font-bold text-xl mb-3 text-white">{program.title}</h3>
+                        <p className="text-gray-200 text-sm line-clamp-3 leading-relaxed">{program.description}</p>
+                      </CardContent>
+                      <CardFooter className="p-5 pt-0 flex justify-between text-sm text-gray-300 mt-auto">
+                        <div className="flex items-center">
+                          <Radio className="h-4 w-4 mr-2" />
+                          <span className="font-medium">{program.schedule}</span>
+                        </div>
+                        <LikeButton targetId={`program-${program.id}`} />
+                      </CardFooter>
+                    </Card>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="bg-gray-800 border-gray-600 p-4 max-w-xs">
+                    <div className="space-y-3">
+                      <div className="font-bold text-white text-lg">{program.title}</div>
+                      <div className="text-sm">
+                        <span className="text-red-400 font-medium">Durata:</span>{" "}
+                        <span className="text-gray-200">{program.duration} minuti</span>
                       </div>
-                      <LikeButton targetId={`program-${program.id}`} />
-                    </CardFooter>
-                  </Card>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="bg-gray-800 border-gray-700 p-3 max-w-xs">
-                  <div className="space-y-2">
-                    <div className="font-bold">{program.title}</div>
-                    <div className="text-sm">
-                      <span className="text-primary-400">Durata:</span> {program.duration} minuti
+                      <div className="text-sm">
+                        <span className="text-red-400 font-medium">Formato:</span>{" "}
+                        <span className="text-gray-200">{program.details}</span>
+                      </div>
+                      <div className="text-sm">
+                        <span className="text-red-400 font-medium">Conduttori:</span>{" "}
+                        <span className="text-gray-200">{program.hosts.join(", ")}</span>
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <span className="text-primary-400">Formato:</span> {program.details}
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-primary-400">Conduttori:</span> {program.hosts.join(", ")}
-                    </div>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ))}
-        </div>
-      )}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
